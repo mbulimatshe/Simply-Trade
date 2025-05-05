@@ -1,60 +1,42 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-
-const navLinks = ["Invest", "Trade", "Crypto", "Cash", "Tax", "Retirement"];
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import logo from "../logo.svg";
 
 const AppNavigation = () => {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center px-6 py-4">
-        <div className="text-2xl font-bold text-black">SimplyTrade</div>
+    <motion.nav
+      className="flex items-center justify-between px-6 py-4 bg-[#001F3F] shadow-sm"
+      initial={{ y: -30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
+      {/* Logo or Title */}
+      <img src={logo} className="w-24 md:w-32 h-auto" alt="SimplyTrade Logo" />
 
-        {/* Desktop Nav */}
-        <ul className="hidden md:flex space-x-6 text-sm font-medium text-gray-600">
-          {navLinks.map((link) => (
-            <li
-              key={link}
-              className="hover:text-black transition-colors duration-200 cursor-pointer"
-            >
-              {link}
-            </li>
-          ))}
-        </ul>
+      {/* Navigation Links */}
+      <ul className="flex space-x-6 text-white text-sm font-medium">
+        {[
+          { name: "Invest", path: "/invest" },
+          { name: "Trade", path: "/trade" },
+        ].map(({ name, path }) => (
+          <motion.li key={name} whileHover={{ scale: 1.1 }}>
+            <Link to={path} className="hover:text-sky-400 transition">
+              {name}
+            </Link>
+          </motion.li>
+        ))}
+      </ul>
 
-        {/* Mobile Hamburger */}
-        <div className="md:hidden">
-          <button onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Slide-in Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.ul
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-white px-6 pb-4 text-gray-600 text-sm font-medium space-y-3"
-          >
-            {navLinks.map((link) => (
-              <li key={link} className="hover:text-black cursor-pointer">
-                {link}
-              </li>
-            ))}
-            <li>
-              <button className="mt-4 w-full bg-black text-white py-2 rounded-full hover:bg-gray-800 transition">
-                Get Started
-              </button>
-            </li>
-          </motion.ul>
-        )}
-      </AnimatePresence>
-    </nav>
+      {/* CTA Button (optional) */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
+        className="hidden md:block bg-sky-500 text-white px-4 py-2 rounded-full text-sm hover:bg-sky-600"
+      >
+        Get Started
+      </motion.button>
+    </motion.nav>
   );
 };
 
